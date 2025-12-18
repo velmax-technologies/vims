@@ -124,4 +124,11 @@
       0 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
     ),
   ),
+  'spatie/laravel-settings' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelSettings\\LaravelSettingsServiceProvider',
+    ),
+  ),
 );

@@ -2,5 +2,6 @@
     "User": true,
     "Role": true,
     "Permission": true,
-    "Activity": true
+    "Activity": true,
+    "Setting": true
 }

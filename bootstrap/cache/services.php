@@ -40,7 +40,8 @@
     36 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
     37 => 'Spatie\\Permission\\PermissionServiceProvider',
     38 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
-    39 => 'App\\Providers\\AppServiceProvider',
+    39 => 'Spatie\\LaravelSettings\\LaravelSettingsServiceProvider',
+    40 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -68,7 +69,8 @@
     21 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
     22 => 'Spatie\\Permission\\PermissionServiceProvider',
     23 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
-    24 => 'App\\Providers\\AppServiceProvider',
+    24 => 'Spatie\\LaravelSettings\\LaravelSettingsServiceProvider',
+    25 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (
