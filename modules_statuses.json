@@ -3,5 +3,6 @@
     "Role": true,
     "Permission": true,
     "Activity": true,
-    "Setting": true
+    "Setting": true,
+    "Customer": true
 }
