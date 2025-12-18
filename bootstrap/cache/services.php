@@ -39,7 +39,8 @@
     35 => 'PHPOpenSourceSaver\\JWTAuth\\Providers\\LaravelServiceProvider',
     36 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
     37 => 'Spatie\\Permission\\PermissionServiceProvider',
-    38 => 'App\\Providers\\AppServiceProvider',
+    38 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
+    39 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -66,7 +67,8 @@
     20 => 'PHPOpenSourceSaver\\JWTAuth\\Providers\\LaravelServiceProvider',
     21 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
     22 => 'Spatie\\Permission\\PermissionServiceProvider',
-    23 => 'App\\Providers\\AppServiceProvider',
+    23 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
+    24 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (

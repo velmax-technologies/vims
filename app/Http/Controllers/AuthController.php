@@ -10,6 +10,7 @@ use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Auth\LoginResource;
+use Modules\User\Transformers\UserResource;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 

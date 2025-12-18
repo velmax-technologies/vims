@@ -34,7 +34,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $managePurchases = Permission::create(['name' => 'manage purchases']);
 
         // Assign permissions to roles as needed
-        $saRole->givePermissionTo($manageUsers);
+        //$saRole->givePermissionTo($manageUsers);
         $adminRole->givePermissionTo($manageUsers, $manageItems, $pointOfSale, $manageStock, $manageCustomers, $managePurchases);
         $cashierRole->givePermissionTo($pointOfSale, $manageCustomers, $manageUsers, $managePurchases);
         
