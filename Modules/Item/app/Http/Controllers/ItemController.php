@@ -11,6 +11,7 @@ use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Database\QueryException;
 use Modules\Item\Http\Requests\ItemRequest;
 use Modules\Item\Transformers\ItemResource;
+use Modules\Item\Services\CreateItemService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ItemController extends Controller
@@ -34,62 +35,10 @@ class ItemController extends Controller
     public function store(ItemRequest $request) {
         $request->validated();
 
-        DB::beginTransaction();
-        try {
-        $item = Item::create($request->all());
+        $itemData = $request->toArray();
 
-        // Attach tags if provided
-        if ($request->has('tags')) {
-            $tags = array_filter(array_map('trim',  $request->input('tags')));
-            $item->syncTagsWithType($tags, 'itemTag');
-        }
-
-       
-
-        // stock
-        if( $request->has('qty')) {
-            $stock = $item->stocks()->create([
-                'quantity' => $request->input('qty'),
-                'note' => $request->input('note', 'initial stock'),
-            ]);
-
-            // stock cost
-            if ($request->has('cost')) {
-                $item->costs()->create([
-                    'cost' => $request->input('cost'),
-                    'stock_id' => $stock->id,
-                ]);
-            }
-
-            // retail price
-            if ($request->has('retail') && !empty($request->input('retail'))) {
-                $item->item_prices()->create([
-                    'price' => $request->input('retail'),
-                ])->attachTag('retail', 'priceTag');
-            }
-
-            // wholesale price
-            if ($request->has('wholesale') && !empty($request->input('wholesale'))) {
-                $item->item_prices()->create([
-                    'price' => $request->input('wholesale'),
-                ])->attachTag('wholesale', 'priceTag');
-            }
-        }
-
+        (new CreateItemService())->create($itemData);
         
-
-        DB::commit();
-        return (new ItemResource($item))
-            ->additional($this->preparedResponse('store'))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);   
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response([
-                'message' => $e->getMessage(),
-                'status' => 'failed'
-            ], 400);
-        } 
     }
 
     /**

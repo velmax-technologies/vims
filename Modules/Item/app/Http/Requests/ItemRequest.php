@@ -21,7 +21,7 @@ class ItemRequest extends FormRequest
 
         if ($this->isMethod('POST')) {
             $rules = [
-                'name' => 'required|string|max:255|unique:items,name',
+                'item' => 'required|string|max:255|unique:items,name',
                 'alias' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:1000',
                 'qty' => 'nullable|integer|min:0',

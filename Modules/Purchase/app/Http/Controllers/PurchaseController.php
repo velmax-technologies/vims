@@ -47,8 +47,6 @@ class PurchaseController extends Controller
             // Attach items if provided
             if ($request->has('purchase_items')) {
                 $purchase->purchase_items()->createMany($request->purchase_items);
-
-                
             }
 
             // log
