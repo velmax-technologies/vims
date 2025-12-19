@@ -50,7 +50,8 @@ class Item extends Model
     public function getAvailableQuantityAttribute()
     {
         // Adjust 'quantity' if your Stock model uses a different field name
-        return $this->stocks()->sum('quantity') + $this->addition_stock_adjustments->sum('quantity') + ($this->item_return->quantity ?? 0) - $this->subtraction_stock_adjustments->sum('quantity') - ($this->item_sale->quantity ?? 0) ?? 0;
+        /////return $this->stocks()->sum('quantity') + $this->addition_stock_adjustments->sum('quantity') + ($this->item_return->quantity ?? 0) - $this->subtraction_stock_adjustments->sum('quantity') - ($this->item_sale->quantity ?? 0) ?? 0;
+        return $this->stocks()->sum('available_quantity') ?? 0;
     }
 
     // stock

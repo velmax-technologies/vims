@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponseFormatTrait;
+use Illuminate\Database\QueryException;
 use Modules\Purchase\Http\Requests\PurchaseRequest;
 use Modules\Purchase\Transformers\PurchaseResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Modules\StockAdjustment\Services\StockAdjustmentService;
 
 class PurchaseController extends Controller
 {
@@ -48,7 +51,11 @@ class PurchaseController extends Controller
                 
             }
 
-            
+            // log
+            activity()
+                ->causedBy($user)
+                ->performedOn($purchase)
+                ->log('Purchase created - Invoice #' . $purchase->invoice_number);
 
             DB::commit();
             return (new PurchaseResource($purchase))->additional($this->preparedResponse('store'));
@@ -66,9 +73,15 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        //
-
-        return response()->json([]);
+        try {
+            $purchase = Purchase::with('purchase_items')->findOrFail($id);
+            
+            return (new PurchaseResource($purchase))->additional($this->preparedResponse('show'));
+        } catch (ModelNotFoundException $modelException) {
+            return $this->recordNotFoundResponse($modelException);
+        } catch (QueryException $queryException) {
+            return $this->queryExceptionResponse($queryException);
+        }
     }
 
     /**
@@ -104,10 +117,7 @@ class PurchaseController extends Controller
                     );  
                 }
 
-                // Clear existing items and add new ones
-
-                //$purchase->purchase_items()->delete(); // Clear existing items
-                //$purchase->purchase_items()->createMany($request->purchase_items);
+                
             }
 
             // purchase status
@@ -117,13 +127,25 @@ class PurchaseController extends Controller
                     $item = $purchaseItem->item;
                     $stock = $item->stocks()->create(
                         [
-                            'note' => 'Purchase - ' . $purchase->id],
-                        [
-                            'quantity' => $purchaseItem->quantity
-                        ]
+                            'note' => 'Purchase - ' . $purchase->invoice_number,
+                            'quantity' => $purchaseItem->quantity,
+                            'available_quantity' => $purchaseItem->quantity,
+                        ],
+                       
                     );
-                    
-                    $stock->increment('quantity', $purchaseItem->quantity);
+
+                    // stock adjustment
+                    $adjustmentData = [
+                        'item_id' => $purchaseItem->item_id,
+                        'quantity' => $purchaseItem->quantity,
+                        'note' => 'Purchase - Invoice #' . $purchase->invoice_number,
+                        'type' => 'addition',
+                        'adjusted_at' => now(),
+                    ];
+
+                    //$stock->increment('quantity', $purchaseItem->quantity);
+
+                    (new StockAdjustmentService())->adjust($adjustmentData);
 
                     // Update item cost
                     ItemCost::updateOrCreate(

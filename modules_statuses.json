@@ -9,5 +9,6 @@
     "Item": true,
     "Stock": true,
     "File": true,
-    "Purchase": true
+    "Purchase": true,
+    "StockAdjustment": true
 }

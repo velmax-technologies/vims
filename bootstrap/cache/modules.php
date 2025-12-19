@@ -10,8 +10,9 @@
     6 => 'Modules\\Role\\Providers\\RoleServiceProvider',
     7 => 'Modules\\Setting\\Providers\\SettingServiceProvider',
     8 => 'Modules\\Stock\\Providers\\StockServiceProvider',
-    9 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
-    10 => 'Modules\\User\\Providers\\UserServiceProvider',
+    9 => 'Modules\\StockAdjustment\\Providers\\StockAdjustmentServiceProvider',
+    10 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
+    11 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'eager' => 
   array (
@@ -24,8 +25,9 @@
     6 => 'Modules\\Role\\Providers\\RoleServiceProvider',
     7 => 'Modules\\Setting\\Providers\\SettingServiceProvider',
     8 => 'Modules\\Stock\\Providers\\StockServiceProvider',
-    9 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
-    10 => 'Modules\\User\\Providers\\UserServiceProvider',
+    9 => 'Modules\\StockAdjustment\\Providers\\StockAdjustmentServiceProvider',
+    10 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
+    11 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'deferred' => 
   array (

@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/stockadjustment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\StockAdjustment\\": "app/",
+            "Modules\\StockAdjustment\\Database\\Factories\\": "database/factories/",
+            "Modules\\StockAdjustment\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\StockAdjustment\\Tests\\": "tests/"
+        }
+    }
+}

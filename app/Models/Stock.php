@@ -16,6 +16,7 @@ class Stock extends Model
         'item_id',
         'supplier_id',
         'quantity',
+        'available_quantity',
         'note',
         'expiry_date',
         'is_expired',

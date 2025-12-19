@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
+use Modules\StockAdjustment\Services\StockAdjustmentService;
 
 class ItemImport implements ToModel, WithSkipDuplicates, WithHeadingRow
 {
@@ -54,10 +55,24 @@ class ItemImport implements ToModel, WithSkipDuplicates, WithHeadingRow
 
                 [
                     'quantity' => $row['qty'] ?? 0,
+                    'available_quantity' => $row['qty'] ?? 0,
                     'expiry_date' => $row['expiry_date'] ?? null,
                     'is_expired' => isset($row['is_expired']) ? (bool)$row['is_expired'] : false,
                 ]
             );
+
+            // stock adjustment
+            $adjustmentData = [
+                'item_id' => $item->id,
+                'quantity' => $row['qty'] ?? 0,
+                'note' => $stock_note,
+                'type' => 'addition',
+                'adjusted_at' => now(),
+            ];
+
+
+            (new StockAdjustmentService())->adjust($adjustmentData);
+
 
             // update or create related item costs
             $item->costs()->updateOrCreate(
