@@ -31,11 +31,12 @@ class RolesAndPermissionsSeeder extends Seeder
         $pointOfSale = Permission::create(['name' => 'point of sale']);
         $manageStock = Permission::create(['name' => 'manage stock']);
         $manageCustomers = Permission::create(['name' => 'manage customers']);
+        $manageSuppliers = Permission::create(['name' => 'manage suppliers']);
         $managePurchases = Permission::create(['name' => 'manage purchases']);
 
         // Assign permissions to roles as needed
         //$saRole->givePermissionTo($manageUsers);
-        $adminRole->givePermissionTo($manageUsers, $manageItems, $pointOfSale, $manageStock, $manageCustomers, $managePurchases);
+        $adminRole->givePermissionTo($manageUsers, $manageItems, $pointOfSale, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
         $cashierRole->givePermissionTo($pointOfSale, $manageCustomers, $manageUsers, $managePurchases);
         
     }

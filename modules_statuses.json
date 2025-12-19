@@ -4,5 +4,6 @@
     "Permission": true,
     "Activity": true,
     "Setting": true,
-    "Customer": true
+    "Customer": true,
+    "Supplier": true
 }

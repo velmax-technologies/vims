@@ -6,7 +6,8 @@
     2 => 'Modules\\Permission\\Providers\\PermissionServiceProvider',
     3 => 'Modules\\Role\\Providers\\RoleServiceProvider',
     4 => 'Modules\\Setting\\Providers\\SettingServiceProvider',
-    5 => 'Modules\\User\\Providers\\UserServiceProvider',
+    5 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
+    6 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'eager' => 
   array (
@@ -15,7 +16,8 @@
     2 => 'Modules\\Permission\\Providers\\PermissionServiceProvider',
     3 => 'Modules\\Role\\Providers\\RoleServiceProvider',
     4 => 'Modules\\Setting\\Providers\\SettingServiceProvider',
-    5 => 'Modules\\User\\Providers\\UserServiceProvider',
+    5 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
+    6 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'deferred' => 
   array (
