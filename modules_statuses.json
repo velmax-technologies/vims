@@ -5,5 +5,9 @@
     "Activity": true,
     "Setting": true,
     "Customer": true,
-    "Supplier": true
+    "Supplier": true,
+    "Item": true,
+    "Stock": true,
+    "File": true,
+    "Purchase": true
 }
