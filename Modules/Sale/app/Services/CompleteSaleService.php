@@ -3,6 +3,7 @@
 namespace Modules\Sale\Services;
 
 use App\Models\Sale;
+use App\Models\ItemSale;
 use Illuminate\Support\Facades\Auth;
 
 class CompleteSaleService
@@ -10,6 +11,19 @@ class CompleteSaleService
     public function completeSale(Array $requestData, Sale $sale): bool {
 
         $sale->update($requestData);
+
+        // create item sales records
+        foreach ($sale->sale_items as $saleItem) {
+            $itemSaleData = [
+                'sale_id' => $sale->id,
+                'item_id' => $saleItem->item_id,
+                'quantity' => $saleItem->quantity,
+                'cost' => $saleItem->cost,
+                'price' => $saleItem->price,
+                'total' => $saleItem->line_total,
+            ];
+            ItemSale::create($itemSaleData);
+        }
 
         // log sale completion
         activity()

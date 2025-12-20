@@ -3,9 +3,13 @@
 namespace Modules\Stock\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Stock;
 use Illuminate\Http\Request;
+use App\Filters\FilterItemStock;
 use App\Http\Controllers\Controller;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Traits\ApiResponseFormatTrait;
+use Spatie\QueryBuilder\AllowedFilter;
 use Modules\Stock\Transformers\StockResource;
 
 class StockController extends Controller
@@ -16,7 +20,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $items = Item::has('stocks')->get();
+       $items = Item::with('stocks')->get();
         return (StockResource::collection($items))->additional($this->preparedResponse('index'));    
     }
 

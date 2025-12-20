@@ -11,6 +11,7 @@ class Messages
     const TRASHED_SUCCESSFULLY = 'Record trashed successfully';
     const LOGIN_SUCCESSFUL = "Login successful";
     const IMPORT_SUCCESSFUL = "Import successful";
+    const UPLOAD_SUCCESSFUL = "Upload successful";
 
     const VALIDATION_FAILED = 'Validation failed';
     const NO_QUERY_RESULTS = 'No record found';

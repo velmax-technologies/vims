@@ -10,8 +10,12 @@ class ItemSale extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'sale_id',
         'item_id',
         'quantity',
+        'cost',
+        'price',
+        'total',
     ];
 
     /**

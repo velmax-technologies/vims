@@ -2,10 +2,12 @@
 
 namespace Modules\File\Http\Controllers;
 
+use Laravel\Pail\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\File\Http\Requests\FileRequest;
+use Modules\File\Transformers\FileUploadResource;
 
 class FileController extends Controller
 {
@@ -39,7 +41,7 @@ class FileController extends Controller
         // Optionally, save file path or other details to a database
         // e.g., File::create(['name' => $file->getClientOriginalName(), 'path' => $path]);
 
-        return response()->json(['message' => 'File uploaded successfully', 'path' => $filePath]);
+        return FileUploadResource::make(null);
     }
 
     /**

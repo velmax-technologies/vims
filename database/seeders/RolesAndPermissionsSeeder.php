@@ -35,15 +35,19 @@ class RolesAndPermissionsSeeder extends Seeder
         $manageCustomers = Permission::create(['name' => 'manage customers']);
         $manageSuppliers = Permission::create(['name' => 'manage suppliers']);
         $managePurchases = Permission::create(['name' => 'manage purchases']);
-        $manageSales = Permission::create(['name' => 'manage sales']);
+        $manageSales = Permission::create(['name' => 'manage sales']); // create, view, update, delete sales
 
         // single action permissions
         $createSale = Permission::create(['name' => 'create sale']);
+        $returnCompletedSale = Permission::create(['name' => 'return completed sale']);
+        $cancelPendingSale = Permission::create(['name' => 'cancel pending sale']);
+        $cancelCompletedSale = Permission::create(['name' => 'cancel completed sale']);
+
 
         // Assign permissions to roles as needed
         //$saRole->givePermissionTo($manageUsers);
-        $adminRole->givePermissionTo($manageUsers, $manageItems, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
-        $cashierRole->givePermissionTo($manageSales, $createSale, $manageCustomers, $manageUsers, $managePurchases);
+        $adminRole->givePermissionTo($manageUsers, $manageItems, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases, $returnCompletedSale, $cancelPendingSale, $cancelCompletedSale);
+        $cashierRole->givePermissionTo($manageSales, $createSale, $manageCustomers, $manageUsers, $managePurchases, $cancelPendingSale);
         $waiterRole->givePermissionTo($createSale);
         $waitressRole->givePermissionTo($createSale);
         

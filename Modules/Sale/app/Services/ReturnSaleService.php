@@ -33,13 +33,15 @@ class ReturnSaleService
             }
         }
 
+        // delete associated item sales records
+        $sale->item_sales()->delete();
 
         // log sale return
         activity()
             ->causedBy(auth()->user())
             ->performedOn($sale)
             ->withProperties(['sale_id' => $sale->id])
-            ->log('Sale returned with ID: ' . $sale->id);
+            ->log('Sale ' . $requestData['status'] . ' with ID: ' . $sale->id);
 
         return true;
     }

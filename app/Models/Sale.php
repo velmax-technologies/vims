@@ -37,4 +37,10 @@ class Sale extends Model
     {
         return $this->hasMany(SaleItem::class);
     }
+
+    // item sales relationship
+    public function item_sales(): HasMany
+    {
+        return $this->hasMany(ItemSale::class); 
+    }
 }

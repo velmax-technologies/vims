@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('item_sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->integer('quantity')->default(1);
-            // $table->decimal('price', 10, 2)->default(0.00);
-            // $table->decimal('total', 10, 2)->default(0.00);
+            $table->decimal('cost', 10, 2)->default(0.00);
+            $table->decimal('price', 10, 2)->default(0.00);
+            $table->decimal('total', 10, 2)->default(0.00);
             // $table->string('note')->nullable();
             $table->timestamps();
             $table->softDeletes();

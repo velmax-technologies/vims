@@ -56,6 +56,8 @@ class SaleController extends Controller
             $itemModel = Item::find($item['item_id']);
             $availableQuantity = $itemModel->available_quantity;
 
+            //return $availableQuantity;
+
             if ($item['quantity'] > $availableQuantity) {
                 return $this->errorResponse("Only ($availableQuantity) pieces of $itemModel->name are available in stock.", 400, null);
             }
@@ -78,6 +80,7 @@ class SaleController extends Controller
                 collect($request->sale_items)->map(function ($item) use ($sale) {
                     return [
                         'item_id' => $item['item_id'],
+                        'cost' => $item['cost'],
                         'price' => $item['price'],
                         'quantity' => $item['quantity'],
                         'line_total' => $item['price'] * $item['quantity'],
@@ -158,11 +161,6 @@ class SaleController extends Controller
      */
     public function update(SaleRequest $request, $id)
     {
-        // user can create sale
-        if (!Auth::user()->can('manage sales')) {
-            return $this->errorResponse('Unauthorized', 403, null);
-        }
-
          $request->validated();
 
         try {
@@ -172,13 +170,41 @@ class SaleController extends Controller
 
             // completing the sale
             if ($request->status === 'completed' && $sale->status !== 'completed') {
+                if (!Auth::user()->can('manage sales')) {
+                    return $this->errorResponse('Unauthorized', 403, null);
+                }
                 (new CompleteSaleService())->completeSale($request->all(), $sale);
             }elseif($request->status == 'pending' && $sale->status == 'pending') {
+                if (!Auth::user()->can('manage sales')) {
+                    return $this->errorResponse('Unauthorized', 403, null);
+                }
                 $sale->update($request->all());
             }
-            elseif($request->status == 'cancelled' || $request->status == 'returned') {
+            elseif($request->status == 'cancelled' && $sale->status === 'completed') {
+                if (!Auth::user()->can('cancel completed sale')) {
+                    return $this->errorResponse('Unauthorized to cancel completed sales', 403, null);
+                }
                 (new ReturnSaleService())->returnSale($request->all(), $sale);
             }
+            elseif($request->status == 'returned' && $sale->status === 'completed') {
+                if (!Auth::user()->can('return completed sale')) {
+                    return $this->errorResponse('Unauthorized to return completed sales', 403, null);
+                }
+                (new ReturnSaleService())->returnSale($request->all(), $sale);
+            }
+            elseif($request->status == 'cancelled' && $sale->status === 'pending') {
+               
+                (new ReturnSaleService())->returnSale($request->all(), $sale);
+            }   
+
+             // log sale update
+             activity()
+             ->causedBy(Auth::user())
+             ->performedOn($sale)
+             ->withProperties(['sale_id' => $sale->id])
+             ->log('Sale updated with ID: ' . $sale->id);
+
+
             DB::commit();
             return (new SaleResource($sale))
                 ->additional($this->preparedResponse('update'));
