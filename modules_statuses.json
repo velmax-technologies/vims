@@ -10,5 +10,6 @@
     "Stock": true,
     "File": true,
     "Purchase": true,
-    "StockAdjustment": true
+    "StockAdjustment": true,
+    "Sale": true
 }

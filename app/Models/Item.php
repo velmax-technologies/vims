@@ -21,6 +21,7 @@ class Item extends Model
         'name',
         'slug',
         'alias',
+        'quantity',
         'description',
         'sku',
         'upc',

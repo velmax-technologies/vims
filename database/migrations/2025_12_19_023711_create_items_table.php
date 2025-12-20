@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('slug');
             $table->string('alias')->nullable();
+            //$table->decimal('quantity', 10, 2);
             $table->text('description')->nullable();
             $table->string('sku')->unique()->nullable();
             $table->string('upc')->unique()->nullable();

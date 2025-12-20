@@ -16,6 +16,11 @@ class CreateItemService
             $item = Item::firstOrCreate([
                 'name' => $data['item'],
                 'alias' => $data['alias'] ?? null,
+                //'quantity' => $data['quantity'] ?? 0,
+                'description' => $data['description'] ?? null,
+                'sku' => $data['sku'] ?? null,
+                'upc' => $data['upc'] ?? null,
+                'is_active' => isset($data['is_active']) ? (bool)$data['is_active'] : true,
             ]);
 
             $tags = explode(',', $data['tags'] ?? '');
@@ -31,7 +36,7 @@ class CreateItemService
                 $item->attachTag($tag, 'itemCategoryTag'); // Replace 'type' with your desired tag type
             }
 
-            $stock_note = $data['note'] ?? 'initial stock - ' . now()->toDateString();
+            $stock_note = $data['note'] ?? 'initial stock';
 
             // update or create related stocks
             $item->stocks()->updateOrCreate(

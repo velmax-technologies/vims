@@ -24,11 +24,23 @@ class ItemRequest extends FormRequest
                 'item' => 'required|string|max:255|unique:items,name',
                 'alias' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:1000',
-                'qty' => 'nullable|integer|min:0',
+                'quantity' => 'nullable|integer|min:0',
                 'note' => 'nullable|string|max:500',
                 'expiry_date' => 'nullable|date',
                 'is_expired' => 'nullable|boolean',
                 'tags' => 'nullable|array',
+                'tags.*' => 'string|max:50', // Each tag should be a string with a max length
+            ];
+        }
+
+        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
+            $itemId = $this->route('id'); // Assuming 'id' is the route parameter name
+            $rules = [
+                'name' => 'sometimes|required|string|max:255|unique:items,name,' . $itemId,
+                'alias' => 'sometimes|nullable|string|max:100',
+                'description' => 'sometimes|nullable|string|max:1000',
+                'note' => 'sometimes|nullable|string|max:500',
+                'tags' => 'sometimes|nullable|array',
                 'tags.*' => 'string|max:50', // Each tag should be a string with a max length
             ];
         }

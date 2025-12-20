@@ -3,6 +3,7 @@
 namespace Modules\Item\Http\Controllers;
 
 use App\Models\Item;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,30 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(ItemRequest $request, $id) {
+        $request->validated();
+
+        if (!auth()->user()->can('manage items')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        try {
+            $item = Item::findOrFail($id);
+
+            $data = $request->all();
+
+           
+
+            $item->update($request->all());
+            
+            return ItemResource::make($item)->additional($this->preparedResponse('update'));
+
+        } catch (ModelNotFoundException $modelException) {
+            return $this->recordNotFoundResponse($modelException);
+        } catch (QueryException $queryException) {
+            return $this->queryExceptionResponse($queryException);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

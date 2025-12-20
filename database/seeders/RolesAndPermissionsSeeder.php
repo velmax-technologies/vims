@@ -24,20 +24,27 @@ class RolesAndPermissionsSeeder extends Seeder
         $cashierRole = Role::create(['name' => 'cashier']);
         $userRole = Role::create(['name' => 'user']);
         $customerRole = Role::create(['name' => 'customer']);
+        $waiterRole = Role::create(['name' => 'waiter']);
+        $waitressRole = Role::create(['name' => 'waitress']);
 
-        // Example of creating a permission
+        // system permissions
+        // general permissions
         $manageUsers = Permission::create(['name' => 'manage users']);
         $manageItems = Permission::create(['name' => 'manage items']);
-        $pointOfSale = Permission::create(['name' => 'point of sale']);
         $manageStock = Permission::create(['name' => 'manage stock']);
         $manageCustomers = Permission::create(['name' => 'manage customers']);
         $manageSuppliers = Permission::create(['name' => 'manage suppliers']);
         $managePurchases = Permission::create(['name' => 'manage purchases']);
+        $manageSales = Permission::create(['name' => 'manage sales']);
+
+        // single action permissions
+        $createSale = Permission::create(['name' => 'create sale']);
 
         // Assign permissions to roles as needed
         //$saRole->givePermissionTo($manageUsers);
-        $adminRole->givePermissionTo($manageUsers, $manageItems, $pointOfSale, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
-        $cashierRole->givePermissionTo($pointOfSale, $manageCustomers, $manageUsers, $managePurchases);
+        $adminRole->givePermissionTo($manageUsers, $manageItems, $manageSales, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
+        $cashierRole->givePermissionTo($manageSales, $manageCustomers, $manageUsers, $managePurchases);
+        $waiterRole->givePermissionTo($createSale);
         
     }
 }

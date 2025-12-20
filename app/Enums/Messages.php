@@ -9,6 +9,9 @@ class Messages
     const FETCHED_SUCCESSFULLY = 'Record fetched successfully';
     const UPDATED_SUCCESSFULLY = 'Record updated successfully';
     const TRASHED_SUCCESSFULLY = 'Record trashed successfully';
+    const LOGIN_SUCCESSFUL = "Login successful";
+    const IMPORT_SUCCESSFUL = "Import successful";
+
     const VALIDATION_FAILED = 'Validation failed';
     const NO_QUERY_RESULTS = 'No record found';
     const NON_NUMERIC_ID = 'Provided id is not numeric';
@@ -17,7 +20,6 @@ class Messages
     const LOGGED_OUT_SUCCESSFULLY = 'Successfully logged out';
     const INTERNAL_SERVER_ERROR_MESSAGE = "Internal Server Error";
     const UNAUTHORIZED_DOMAIN_OR_IP = "Unauthorized domain or IP";
-    const LOGIN_SUCCESSFUL = "Login successful";
     const RESET_PASSWORD_SUCCESSFUL = "Password reset successfully";
     const OTP_SUCCESSFUL = "OTP sent successfully to ";
     const OTP_VERIFIED = "OTP verified successfully";
