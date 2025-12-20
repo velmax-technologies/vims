@@ -54,6 +54,7 @@ class SaleRequest extends FormRequest
             
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             $rules = [
+                'status' => 'required|in:pending,completed,cancelled,returned',
                 'customer_id' => 'sometimes|required|exists:customers,id',
                 'user_id' => 'sometimes|required|exists:users,id',
                 'total_amount' => 'sometimes|required|numeric|min:0',

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2);
             $table->timestamp('sold_at')->useCurrent();
             $table->string('note')->nullable();
-            $table->string('status')->default('pending'); // completed, returned, pending
+            $table->string('status')->default('pending'); // completed, cancelled, returned, pending
             $table->softDeletes(); // Soft delete support
             $table->timestamps();
         });

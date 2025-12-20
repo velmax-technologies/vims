@@ -19,6 +19,7 @@ class StockResource extends JsonResource
                 return [
                     'id' => $stock->id,
                     'quantity' => $stock->quantity,
+                    'available_quantity' => $stock->available_quantity,
                     'note' => $stock->note,
                     'created_at' => $stock->created_at,
                 ];

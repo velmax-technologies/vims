@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->decimal('quantity', 10, 2)->default(0); // Quantity adjusted
             $table->string('reason')->nullable(); // Reason for adjustment eg 'damage', 'theft', 'correction', expired, etc.
-            $table->enum('type', ['addition', 'subtraction', 'sale', 'purchase'])->default('sale'); // Type of adjustment
+            $table->enum('type', ['addition', 'subtraction', 'sale', 'purchase', 'return'])->default('sale'); // Type of adjustment
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // User who made the adjustment
             $table->timestamp('adjusted_at')->useCurrent(); // Timestamp of adjustment
             $table->string('note')->nullable(); // Additional note for the adjustment

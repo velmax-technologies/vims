@@ -42,9 +42,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Assign permissions to roles as needed
         //$saRole->givePermissionTo($manageUsers);
-        $adminRole->givePermissionTo($manageUsers, $manageItems, $manageSales, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
-        $cashierRole->givePermissionTo($manageSales, $manageCustomers, $manageUsers, $managePurchases);
+        $adminRole->givePermissionTo($manageUsers, $manageItems, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases);
+        $cashierRole->givePermissionTo($manageSales, $createSale, $manageCustomers, $manageUsers, $managePurchases);
         $waiterRole->givePermissionTo($createSale);
+        $waitressRole->givePermissionTo($createSale);
         
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -49,5 +50,20 @@ class Purchase extends Model
     public function purchase_items()
     {
         return $this->hasMany(PurchaseItem::class);     
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($purchase) {
+            $purchase->notes = "Purchase - Invoice #" . $purchase->invoice_number;
+            // You may need additional logic here to ensure uniqueness, 
+            // e.g., appending a number if the slug already exists.
+        });
+
+        
+
+         
     }
 }

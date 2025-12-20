@@ -2,6 +2,7 @@
 
 namespace Modules\Sale\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Sale;
 use App\Models\Stock;
 use App\Models\ItemSale;
@@ -11,8 +12,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Traits\ApiResponseFormatTrait;
+use Illuminate\Database\QueryException;
 use Modules\Sale\Http\Requests\SaleRequest;
 use Modules\Sale\Transformers\SaleResource;
+use Modules\Sale\Services\ReturnSaleService;
+use Modules\Sale\Services\CompleteSaleService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\StockAdjustment\Services\StockAdjustmentService;
 
 class SaleController extends Controller
@@ -39,14 +44,22 @@ class SaleController extends Controller
      */
     public function store(SaleRequest $request)
     {
-       
-
         // user can create sale
         if (!Auth::user()->can('create sale')) {
             return $this->errorResponse('Unauthorized', 403, null);
         }
 
          $request->validated();
+
+         // check stock availability for each sale item
+         foreach ($request->sale_items as $item) {
+            $itemModel = Item::find($item['item_id']);
+            $availableQuantity = $itemModel->available_quantity;
+
+            if ($item['quantity'] > $availableQuantity) {
+                return $this->errorResponse("Only ($availableQuantity) pieces of $itemModel->name are available in stock.", 400, null);
+            }
+         }
 
         try {
             DB::beginTransaction();
@@ -106,6 +119,13 @@ class SaleController extends Controller
                 
             }
 
+            // log sale creation
+            activity()
+                ->causedBy($user)
+                ->performedOn($sale)
+                ->withProperties(['sale_id' => $sale->id])
+                ->log('Sale created with ID: ' . $sale->id);
+
             // Commit the transaction
             DB::commit(); 
             return(new SaleResource($sale))
@@ -121,19 +141,52 @@ class SaleController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $sale = Sale::findOrFail($id);
 
-        return response()->json([]);
+            return (new SaleResource($sale))
+                ->additional($this->preparedResponse('show'));
+        } catch (ModelNotFoundException $modelException) {
+            return $this->recordNotFoundResponse($modelException);
+        } catch (QueryException $queryException) {
+            return $this->queryExceptionResponse($queryException);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(SaleRequest $request, $id)
     {
-        //
+        // user can create sale
+        if (!Auth::user()->can('manage sales')) {
+            return $this->errorResponse('Unauthorized', 403, null);
+        }
 
-        return response()->json([]);
+         $request->validated();
+
+        try {
+            $sale = Sale::findOrFail($id);
+
+            DB::beginTransaction();
+
+            // completing the sale
+            if ($request->status === 'completed' && $sale->status !== 'completed') {
+                (new CompleteSaleService())->completeSale($request->all(), $sale);
+            }elseif($request->status == 'pending' && $sale->status == 'pending') {
+                $sale->update($request->all());
+            }
+            elseif($request->status == 'cancelled' || $request->status == 'returned') {
+                (new ReturnSaleService())->returnSale($request->all(), $sale);
+            }
+            DB::commit();
+            return (new SaleResource($sale))
+                ->additional($this->preparedResponse('update'));
+        } catch (ModelNotFoundException $modelException) {
+            return $this->recordNotFoundResponse($modelException);
+        } catch (QueryException $queryException) {
+            return $this->queryExceptionResponse($queryException);
+        }
     }
 
     /**
