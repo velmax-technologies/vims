@@ -16,6 +16,7 @@ use Illuminate\Database\QueryException;
 use Modules\Sale\Http\Requests\SaleRequest;
 use Modules\Sale\Transformers\SaleResource;
 use Modules\Sale\Services\ReturnSaleService;
+use Modules\Sale\Services\UpdateSaleService;
 use Modules\Sale\Services\CompleteSaleService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\StockAdjustment\Services\StockAdjustmentService;
@@ -178,7 +179,7 @@ class SaleController extends Controller
                 if (!Auth::user()->can('manage sales')) {
                     return $this->errorResponse('Unauthorized', 403, null);
                 }
-                $sale->update($request->all());
+                (new UpdateSaleService())->update($request->all(), $sale);
             }
             elseif($request->status == 'cancelled' && $sale->status === 'completed') {
                 if (!Auth::user()->can('cancel completed sale')) {
