@@ -3,6 +3,7 @@
 namespace Modules\Item\Services;
 
 use App\Models\Item;
+use App\Models\Unit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Modules\StockAdjustment\Services\StockAdjustmentService;
@@ -11,6 +12,13 @@ class CreateItemService
 {
     public function create(Array $data):bool {
         return DB::transaction(function () use ($data) {
+            // if unit is set
+            if (isset($data['unit']) && !empty($data['unit'])) {
+                $unit = Unit::whereName($data['unit'])->first();
+                if ($unit) {
+                    $data['unit_id'] = $unit->id;
+                }
+            }
 
             // create or update the item 
             $item = Item::firstOrCreate([
@@ -21,6 +29,7 @@ class CreateItemService
                 'sku' => $data['sku'] ?? null,
                 'upc' => $data['upc'] ?? null,
                 'is_active' => isset($data['is_active']) ? (bool)$data['is_active'] : true,
+                'unit_id' => $data['unit_id'] ?? null,
             ]);
 
             $tags = explode(',', $data['tags'] ?? '');

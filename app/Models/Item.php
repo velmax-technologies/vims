@@ -23,6 +23,7 @@ class Item extends Model
         'alias',
         'quantity',
         'description',
+        'unit_id',
         'sku',
         'upc',
         'image_path',

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('alias')->nullable();
             //$table->decimal('quantity', 10, 2);
             $table->text('description')->nullable();
+            $table->foreignId('unit_id')->nullable()->default(1)->constrained('units')->onDelete('set null');
             $table->string('sku')->unique()->nullable();
             $table->string('upc')->unique()->nullable();
             $table->string('image_path')->nullable();
