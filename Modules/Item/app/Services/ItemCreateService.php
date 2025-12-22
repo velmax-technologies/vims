@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Modules\StockAdjustment\Services\StockAdjustmentService;
 
-class CreateItemService
+class ItemCreateService
 {
-    public function create(Array $data):bool {
-        return DB::transaction(function () use ($data) {
-            // if unit is set
+    public function create(Array $data):Item {
+        
+        try {
+            DB::beginTransaction();
+
+            // unit
+            $data['unit_id'] = 1; // default unit id
             if (isset($data['unit']) && !empty($data['unit'])) {
                 $unit = Unit::whereName($data['unit'])->first();
                 if ($unit) {
@@ -20,11 +24,10 @@ class CreateItemService
                 }
             }
 
-            // create or update the item 
-            $item = Item::firstOrCreate([
+            // create the item 
+            $item = Item::create([
                 'name' => $data['item'],
                 'alias' => $data['alias'] ?? null,
-                //'quantity' => $data['quantity'] ?? 0,
                 'description' => $data['description'] ?? null,
                 'sku' => $data['sku'] ?? null,
                 'upc' => $data['upc'] ?? null,
@@ -32,17 +35,26 @@ class CreateItemService
                 'unit_id' => $data['unit_id'] ?? null,
             ]);
 
-            $tags = explode(',', $data['tags'] ?? '');
-            $tags = array_map('trim', $tags); // Trim whitespace from each tag
-            
-            // Ensure tags are unique and not empty
-            $tags = array_filter(array_unique($tags), function ($tag) {
-                return !empty($tag);
-            });
+            // is array of tags
+            if (isset($data['tags']) && is_array($data['tags'])) {
+                $tags = $data['tags'];
+            } else {
+                 $tags = explode(',', $data['tags'] ?? '');
+                $tags = array_map('trim', $tags); // Trim whitespace from each tag
+                
+                // Ensure tags are unique and not empty
+                $tags = array_filter(array_unique($tags), function ($tag) {
+                    return !empty($tag);
+                });
+            }
 
             // Create tags if they don't exist
             foreach ($tags as $tag) {
-                $item->attachTag($tag, 'itemCategoryTag'); // Replace 'type' with your desired tag type
+                $item->attachTag($tag, 'itemCategoryTag');
+                if($tag === 'kitchen-menu') {
+                    $item->is_kitchen_menu = true;
+                    $item->save();
+                }
             }
 
             $stock_note = $data['note'] ?? 'initial stock';
@@ -73,7 +85,6 @@ class CreateItemService
 
 
             (new StockAdjustmentService())->adjust($adjustmentData);
-
 
             // update or create related item costs
             $item->costs()->updateOrCreate(
@@ -114,8 +125,7 @@ class CreateItemService
                 if(!$itemPrice->hasTag($priceTag, 'priceTag')){
                     $itemPrice->attachTag($priceTag, 'priceTag');
                 }
-            }               
-
+            }     
             
             // log
             activity()
@@ -124,7 +134,12 @@ class CreateItemService
                 ->withProperties(['action' => 'create'])
                 ->log('Item(s) created/updated');
 
-            return true;
-        });
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $item;
     }
 }

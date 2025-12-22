@@ -6,6 +6,7 @@ use Spatie\Tags\HasTags;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,8 +27,10 @@ class Item extends Model
         'unit_id',
         'sku',
         'upc',
+        'note',
         'image_path',
         'is_active',
+        'is_kitchen_menu',
     ];
 
     // logging
@@ -102,6 +105,12 @@ class Item extends Model
     public function item_return(): HasOne
     {
         return $this->hasOne(ItemReturn::class);
+    }
+
+    // menu items
+    public function menu_items(): HasMany
+    {
+        return $this->hasMany(MenuItem::class);
     }
 
     protected static function boot()

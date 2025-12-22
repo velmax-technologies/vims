@@ -2,16 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\Item;
-use Spatie\Tags\Tag;
-use App\Models\ItemPrice;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
-use Modules\StockAdjustment\Services\StockAdjustmentService;
+use Modules\Item\Services\ItemCreateService;
 
 class ItemImport implements ToModel, WithSkipDuplicates, WithHeadingRow
 {
@@ -22,7 +16,9 @@ class ItemImport implements ToModel, WithSkipDuplicates, WithHeadingRow
     */
     public function model(array $row)
     {
-        $createItemService = new \Modules\Item\Services\CreateItemService();
-        $createItemService->create($row);
+        // $createItemService = new \Modules\Item\Services\CreateItemService();
+        // $createItemService->create($row);
+
+        (new ItemCreateService())->create($row);
     }
 }

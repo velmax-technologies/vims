@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('upc')->unique()->nullable();
             $table->string('image_path')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_kitchen_menu')->default(false);
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -26,6 +26,8 @@ class TagSeeder extends Seeder
                 ['name' => ['en' => 'glassware'], 'slug' => ['en' => 'glassware'], 'type' => 'itemCategoryTag'],
                 ['name' => ['en' => 'bottleware'], 'slug' => ['en' => 'bottleware'], 'type' => 'itemCategoryTag'],
                 ['name' => ['en' => 'crates'], 'slug' => ['en' => 'crates'], 'type' => 'itemCategoryTag'],
+                ['name' => ['en' => 'kitchen-menu'], 'slug' => ['en' => 'kitchen-menu'], 'type' => 'itemCategoryTag'],
+
                    
             ];  
 

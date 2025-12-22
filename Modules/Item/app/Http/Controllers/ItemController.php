@@ -12,7 +12,7 @@ use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Database\QueryException;
 use Modules\Item\Http\Requests\ItemRequest;
 use Modules\Item\Transformers\ItemResource;
-use Modules\Item\Services\CreateItemService;
+use Modules\Item\Services\ItemCreateService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ItemController extends Controller
@@ -38,8 +38,9 @@ class ItemController extends Controller
 
         $itemData = $request->toArray();
 
-        (new CreateItemService())->create($itemData);
-        
+        $item = (new ItemCreateService())->create($itemData);
+
+        return ItemResource::make($item)->additional($this->preparedResponse('store'));
     }
 
     /**
@@ -70,15 +71,8 @@ class ItemController extends Controller
 
         try {
             $item = Item::findOrFail($id);
-
-            $data = $request->all();
-
-           
-
             $item->update($request->all());
-            
             return ItemResource::make($item)->additional($this->preparedResponse('update'));
-
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);
         } catch (QueryException $queryException) {
@@ -107,10 +101,7 @@ class ItemController extends Controller
             // Log the activity of item deletion
             activity('item deleted')->causedBy(auth()->user())->log('User ' . auth()->user()->username . ' deleted item: ' . $item->name);
 
-            return response()->json([
-                'message' => 'Item deleted successfully',
-                'status' => 'success'
-            ], 200);
+            return ItemResource::make($item)->additional($this->preparedResponse('delete'));
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);
         } catch (QueryException $queryException) {

@@ -27,14 +27,15 @@ class FileController extends Controller
     public function store(FileRequest $request)
     {
         $request->validated(); // Validate the request using the FileRequest rules
-
+        
         if (!Auth::user()->can('manage items')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // Handle file upload
         $file = $request->file('file');
-        $fileName = 'items.'.$file->getClientOriginalExtension(); 
+ 
+        $fileName = strtolower($file->getClientOriginalName());
         //$path = Storage::disk('public')->putFile('uploads', $file); // Store in 'storage/app/public/uploads'
         $filePath = $file->storeAs('uploads', $fileName, 'public'); // 'public' is the disk name
 

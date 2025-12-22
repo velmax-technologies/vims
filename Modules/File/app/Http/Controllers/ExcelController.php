@@ -16,9 +16,16 @@ class ExcelController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function import(Row $row) {
+     public function import_items() {
         
         Excel::import(new ItemImport, 'storage/uploads/items.xlsx') ;
+
+        return new FileImportResource(null);
+    }
+
+    public function import_menu() {
+        
+        Excel::import(new ItemImport, 'storage/uploads/menu.xlsx') ;
 
         return new FileImportResource(null);
     }

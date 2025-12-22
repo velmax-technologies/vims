@@ -43,4 +43,7 @@ class Sale extends Model
     {
         return $this->hasMany(ItemSale::class); 
     }
+
+   
+
 }

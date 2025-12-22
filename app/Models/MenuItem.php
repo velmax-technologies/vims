@@ -4,31 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SaleItem extends Model
+class MenuItem extends Model
 {
+
     use SoftDeletes;
 
     protected $fillable = [
-        'sale_id',
         'item_id',
-        'cost',
-        'price',
         'quantity',
-        'line_total',
     ];
 
-    // relationships
+    // menu item belongs to item
     public function item()
     {
         return $this->belongsTo(Item::class);
     }
-
-    public function sale()
-    {
-        return $this->belongsTo(Sale::class);
-    }
-
-     
 }
