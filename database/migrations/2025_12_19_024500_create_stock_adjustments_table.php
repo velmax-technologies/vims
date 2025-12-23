@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('model')->nullable();// sale, purchase
             $table->integer('model_id')->nullable();
             $table->string('reason')->nullable(); //'sale', 'purchase', 'return', 'cancelled', 'consumed', 'expired', 'damaged', correction
-            $table->enum('type', ['addition', 'subtraction'])->default('addition')->nullable(); // Type of adjustment
+            $table->enum('type', ['addition', 'subtraction', 'correction'])->default('addition')->nullable(); // Type of adjustment
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // User who made the adjustment
             $table->timestamp('adjusted_at')->useCurrent(); // Timestamp of adjustment
             $table->string('note')->nullable(); // Additional note for the adjustment

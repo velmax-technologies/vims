@@ -4,10 +4,12 @@ namespace Modules\StockAdjustment\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\StockAdjustment;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponseFormatTrait;
 use Modules\StockAdjustment\Http\Requests\StockAdjustmentRequest;
+use Modules\StockAdjustment\Services\StockAdjustmentCreateService;
 use Modules\StockAdjustment\Transformers\StockAdjustmentResource;
 
 class StockAdjustmentController extends Controller
@@ -30,16 +32,15 @@ class StockAdjustmentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StockAdjustmentRequest $request) {
+       if (!Auth::user()->can('manage sales')) {
+            return $this->errorResponse('Unauthorized', 403, null);
+        }
+
         $request->validated();
 
         try {
-             // get the authenticated user
-            $user = Auth::user();
-
-            // merge the user_id into the request data
-            $request->merge(['user_id' => $user->id]);
-
-            $stockAdjustment = StockAdjustment::create($request->all());
+           
+            $stockAdjustment = (new StockAdjustmentCreateService())->create($request);
 
             return (new StockAdjustmentResource($stockAdjustment))
                 ->additional($this->preparedResponse('store'));

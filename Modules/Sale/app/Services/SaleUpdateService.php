@@ -30,7 +30,7 @@ class SaleUpdateService
                 $sale->sale_items()->delete();               
 
                 // delete sale item sales
-                $sale->item_sales()->delete();
+                //$sale->item_sales()->delete();
 
                 // delete sale stock adjustments
                 $stockAdjustments = StockAdjustment::where([['model', 'sale'],['model_id', $sale->id]])->get();
@@ -64,9 +64,9 @@ class SaleUpdateService
                 }
                 
                 // create new item sales
-                foreach ($requestData['sale_items'] as $itemData) {
-                    $sale->item_sales()->create($itemData);
-                }
+                // foreach ($requestData['sale_items'] as $itemData) {
+                //     $sale->item_sales()->create($itemData);
+                // }
 
                 // create stock adjustments
                 // stock adjustment for each sale item

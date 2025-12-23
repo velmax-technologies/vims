@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId("item_id")->constrained('items')->onDelete('cascade');
-            $table->foreignId("purchase_id")->nullable()->constrained('purchases')->onDelete('cascade');
+            $table->string('model')->nullable(); // purchase, stock_adjustment
+            $table->integer('model_id')->nullable();
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('available_quantity', 10, 2)->default(0);
             $table->text('note')->nullable();

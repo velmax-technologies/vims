@@ -3,6 +3,7 @@
 namespace Modules\StockAdjustment\Http\Requests;
 
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -21,12 +22,23 @@ class StockAdjustmentRequest extends FormRequest
 
         if ($this->isMethod('POST')) {
             $rules = [
-                //'adjustment_date' => 'required|date',
                 'reason' => 'required|string|max:255',
                 'item_id' => 'required|exists:items,id',
                 'quantity' => 'required|numeric|min:0',
-                'type' => 'required|in:addition,subtraction',
+                'type' => 'required|in:addition,subtraction,correction',
                 'note' => 'nullable|string|max:500',
+                //'model' => 'required_if:type,correction|string|max:255',
+                //'model_id' => 'required_if:type,correction|integer',
+                'model' => [
+                    Rule::requiredIf(function () {
+                        return $this->input('type') == 'correction' || $this->input('type') == 'subtraction';
+                    }),
+                ],
+                'model_id' => [
+                    Rule::requiredIf(function () {
+                        return $this->input('type') == 'correction' || $this->input('type') == 'subtraction';
+                    }),
+                ],
             ];
         }
             
