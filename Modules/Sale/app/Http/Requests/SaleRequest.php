@@ -42,7 +42,7 @@ class SaleRequest extends FormRequest
                         if ($itemId) {
                             $item = Item::find($itemId);
                             $available = $item->available_quantity;
-                            if ($value > $available) {
+                            if ($value > $available && !$item->is_kitchen_menu) {
                                 $fail("Only ($available) pieces of $item->name are available in stock.");
                             }
                         }

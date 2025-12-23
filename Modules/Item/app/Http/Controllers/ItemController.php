@@ -72,7 +72,7 @@ class ItemController extends Controller
         try {
             $item = Item::findOrFail($id);
             $item->update($request->all());
-            return ItemResource::make($item)->additional($this->preparedResponse('update'));
+            return ItemResource::make($item)->additional($this->preparedResponse('destroy'));
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);
         } catch (QueryException $queryException) {

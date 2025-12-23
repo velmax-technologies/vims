@@ -16,9 +16,6 @@ class ItemImport implements ToModel, WithSkipDuplicates, WithHeadingRow
     */
     public function model(array $row)
     {
-        // $createItemService = new \Modules\Item\Services\CreateItemService();
-        // $createItemService->create($row);
-
         (new ItemCreateService())->create($row);
     }
 }

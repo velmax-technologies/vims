@@ -24,6 +24,12 @@ class ItemCreateService
                 }
             }
 
+            // skip existing item
+            $item = Item::where('name', $data['item'])->first();
+            if($item){
+                return $item;
+            }
+
             // create the item 
             $item = Item::create([
                 'name' => $data['item'],

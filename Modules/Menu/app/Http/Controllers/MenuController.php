@@ -26,8 +26,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        // $items = Item::with('menu_items')->get();
-        // return MenuResource::collection($items)->additional($this->preparedResponse('index'));
+         $menus = Menu::with('menu_items')->get();
+        return MenuResource::collection($menus)->additional($this->preparedResponse('index'));
     }
 
     /**
@@ -66,11 +66,9 @@ class MenuController extends Controller
 
         $request->validated();
 
-        
-
         try {
             $menu = (new MenuUpdateService())->update($request, Item::findOrFail($id));
-           
+            
             return (new MenuResource($menu))
                 ->additional($this->preparedResponse('update'));
         } catch (ModelNotFoundException $modelException) {
@@ -94,7 +92,7 @@ class MenuController extends Controller
            
             activity('menu deleted')->causedBy(Auth::user())->log('Menu item ' . Auth::user()->username . ' deleted menu item: ' . $menu->name);
             
-            return MenuResource::make($menu)->additional($this->preparedResponse('delete'));
+            return MenuResource::make($menu)->additional($this->preparedResponse('destroy'));
 
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);

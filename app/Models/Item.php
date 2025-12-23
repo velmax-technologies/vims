@@ -33,6 +33,12 @@ class Item extends Model
         'is_kitchen_menu',
     ];
 
+    //casts
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_kitchen_menu' => 'boolean',
+    ];
+
     // logging
     public function getActivitylogOptions(): LogOptions
     {
@@ -105,6 +111,12 @@ class Item extends Model
     public function item_return(): HasOne
     {
         return $this->hasOne(ItemReturn::class);
+    }
+
+    // menu
+    public function menu(): HasOne
+    {
+        return $this->hasOne(Menu::class);
     }
 
     // menu items

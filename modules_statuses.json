@@ -12,5 +12,6 @@
     "Purchase": true,
     "StockAdjustment": true,
     "Sale": true,
-    "Menu": true
+    "Menu": true,
+    "Report": true
 }
