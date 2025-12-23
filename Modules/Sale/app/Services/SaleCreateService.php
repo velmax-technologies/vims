@@ -83,10 +83,12 @@ class SaleCreateService
                        
                         // Create stock adjustment
                         $data = [
-                            'type' => 'sale',
+                            'type' => 'subtraction',
                             'item_id' => $menuItem->item_id,
                             'quantity' => $requiredQuantity,
-                            'note' => 'Stock adjusted for Sale ID: ' . $sale->id,
+                            'model' => 'sale',
+                            'model_id' => $sale->id,
+                            'reason' => 'sale',
                             'adjusted_at' => now(),
                         ];
 
@@ -96,10 +98,12 @@ class SaleCreateService
                 } else {
                     // for regular items, adjust stock directly
                     $data = [
-                        'type' => 'sale',
+                        'type' => 'subtraction',
                         'item_id' => $sale_item->item_id,
                         'quantity' => $sale_item->quantity,
-                        'note' => 'Stock adjusted for Sale ID: ' . $sale->id,
+                        'model' => 'sale',
+                        'model_id' => $sale->id,
+                        'reason' => 'sale',
                         'adjusted_at' => now(),
                     ];
 
@@ -119,6 +123,7 @@ class SaleCreateService
             
         } catch (\Exception $e) {
             DB::rollBack();
+            throw new \Exception($e->getMessage());
             //return $e->getMessage();
             //return $this->errorResponse($e->getMessage(), 400, null);
         }

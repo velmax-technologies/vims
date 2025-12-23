@@ -83,8 +83,10 @@ class ItemCreateService
             // stock adjustment
             $adjustmentData = [
                 'item_id' => $item->id,
+                'model' => 'item',
+                'model_id' => $item->id,
                 'quantity' => $data['quantity'] ?? 0,
-                'note' => $stock_note,
+                'reason' => $stock_note,
                 'type' => 'addition',
                 'adjusted_at' => now(),
             ];

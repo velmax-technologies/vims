@@ -4,8 +4,6 @@ namespace Modules\Sale\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Sale;
-use App\Models\Stock;
-use App\Models\ItemSale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -15,12 +13,11 @@ use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Database\QueryException;
 use Modules\Sale\Http\Requests\SaleRequest;
 use Modules\Sale\Transformers\SaleResource;
-use Modules\Sale\Services\ReturnSaleService;
 use Modules\Sale\Services\SaleCreateService;
-use Modules\Sale\Services\UpdateSaleService;
-use Modules\Sale\Services\CompleteSaleService;
+use Modules\Sale\Services\SaleUpdateService;
+use Modules\Sale\Services\SaleCompleteService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Modules\StockAdjustment\Services\StockAdjustmentService;
+use Modules\Sale\Services\SaleReturnService;
 
 class SaleController extends Controller
 {
@@ -91,28 +88,28 @@ class SaleController extends Controller
                 if (!Auth::user()->can('manage sales')) {
                     return $this->errorResponse('Unauthorized', 403, null);
                 }
-                (new CompleteSaleService())->completeSale($request->all(), $sale);
+                (new SaleCompleteService())->complete($request->all(), $sale);
             }elseif($request->status == 'pending' && $sale->status == 'pending') {
                 if (!Auth::user()->can('manage sales')) {
                     return $this->errorResponse('Unauthorized', 403, null);
                 }
-                (new UpdateSaleService())->update($request->all(), $sale);
+                (new SaleUpdateService())->update($request->all(), $sale);
             }
             elseif($request->status == 'cancelled' && $sale->status === 'completed') {
                 if (!Auth::user()->can('cancel completed sale')) {
                     return $this->errorResponse('Unauthorized to cancel completed sales', 403, null);
                 }
-                (new ReturnSaleService())->returnSale($request->all(), $sale);
+                (new SaleReturnService())->returnSale($request->all(), $sale);
             }
             elseif($request->status == 'returned' && $sale->status === 'completed') {
                 if (!Auth::user()->can('return completed sale')) {
                     return $this->errorResponse('Unauthorized to return completed sales', 403, null);
                 }
-                (new ReturnSaleService())->returnSale($request->all(), $sale);
+                (new SaleReturnService())->returnSale($request->all(), $sale);
             }
             elseif($request->status == 'cancelled' && $sale->status === 'pending') {
                
-                (new ReturnSaleService())->returnSale($request->all(), $sale);
+                (new SaleReturnService())->returnSale($request->all(), $sale);
             }   
 
              // log sale update
