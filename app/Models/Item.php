@@ -39,6 +39,23 @@ class Item extends Model
         'is_kitchen_menu' => 'boolean',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($item) {
+            $item->slug = Str::slug($item->name);
+            // You may need additional logic here to ensure uniqueness, 
+            // e.g., appending a number if the slug already exists.
+        });
+
+        static::deleting(function ($item) {
+            $item->stocks()->delete();
+            $item->costs()->delete();
+            $item->item_prices()->delete();
+        });
+    }
+
     // logging
     public function getActivitylogOptions(): LogOptions
     {
@@ -125,20 +142,5 @@ class Item extends Model
         return $this->hasMany(MenuItem::class);
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($item) {
-            $item->slug = Str::slug($item->name);
-            // You may need additional logic here to ensure uniqueness, 
-            // e.g., appending a number if the slug already exists.
-        });
-
-        static::deleting(function ($item) {
-            $item->stocks()->delete();
-            $item->costs()->delete();
-            $item->item_prices()->delete();
-        });
-    }
+    
 }

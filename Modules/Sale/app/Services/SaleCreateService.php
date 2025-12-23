@@ -43,6 +43,8 @@ class SaleCreateService
             }
         }
 
+       
+
         try {
             DB::beginTransaction();
 
@@ -89,6 +91,7 @@ class SaleCreateService
                         ];
 
                         (new StockAdjustmentService())->adjust($data);
+
                     }
                 } else {
                     // for regular items, adjust stock directly

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StockAdjustment extends Model
 {
@@ -20,5 +21,11 @@ class StockAdjustment extends Model
         static::creating(function (StockAdjustment $stockAdjustment) {
             $stockAdjustment->user_id ??= auth()->id();
         });
+    }
+
+    // item
+     public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class);
     }
 }
