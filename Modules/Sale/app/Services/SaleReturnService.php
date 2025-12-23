@@ -48,7 +48,6 @@ class SaleReturnService
 
                      (new StockAdjustmentService())->adjust($data);
                 }
-                
                
             }
 
