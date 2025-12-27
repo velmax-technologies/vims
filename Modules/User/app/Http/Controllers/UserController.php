@@ -12,6 +12,7 @@ use App\Filters\FiltersUserPermission;
 use App\Traits\ApiResponseFormatTrait;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\Builder;
 use Modules\User\Http\Requests\UserRequest;
 use Modules\User\Transformers\UserResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,8 +25,20 @@ class UserController extends Controller
      */
     public function index()
     {
+        // $users = QueryBuilder::for(User::class)
+        //     ->allowedFilters(['name', 'email','username', 'phone', AllowedFilter::custom('roles', new FiltersUserRole), AllowedFilter::custom('permission', new FiltersUserPermission)])
+        //     ->get();
+
         $users = QueryBuilder::for(User::class)
-            ->allowedFilters(['name', 'email','username', 'phone', AllowedFilter::custom('role', new FiltersUserRole), AllowedFilter::custom('permission', new FiltersUserPermission)])
+            ->allowedFilters([
+                'name', 'email','username', 'phone',
+                AllowedFilter::callback('roles', function (Builder $query, $value) {
+                    $query->whereHas('roles', function (Builder $q) use ($value) {
+                        $q->whereIn('name', (array) $value);
+                    });
+                }),
+                AllowedFilter::custom('permission', new FiltersUserPermission),
+            ])
             ->get();
         return (UserResource::collection($users))->additional($this->preparedResponse('index'));
     }

@@ -10,6 +10,7 @@ use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Auth\LoginResource;
+use App\Http\Resources\ProfileResource;
 use Modules\User\Transformers\UserResource;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
@@ -53,7 +54,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid token'], 400);
         }
 
-        return (new UserResource($user))->additional($this->preparedResponse('show'));
+        return (new ProfileResource($user))->additional($this->preparedResponse('show'));
     }
 
     public function logout()

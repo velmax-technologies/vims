@@ -12,5 +12,7 @@ class FiltersUserRole implements Filter
         $query->whereHas('roles', function (Builder $query) use ($value) {
             $query->where('name', $value);
         });
+
+         
     }
 }

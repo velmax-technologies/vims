@@ -1,6 +1,8 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponseFormatTrait;
 use Illuminate\Foundation\Application;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,9 +21,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => $e->getMessage(),
-                ], 401);
+                $response = [
+                    'response' => [
+                        'status'      => 'error',
+                        'status_code' => 401,
+                        'error'     => [
+                            'message'   => $e->getMessage(),
+                            'timestamp' => Carbon::now(),
+                        ],
+                    ]
+                ];
+
+                return response()->json($response, 401);
             }
         });
     })->create();

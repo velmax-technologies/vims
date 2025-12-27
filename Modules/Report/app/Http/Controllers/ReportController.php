@@ -2,11 +2,19 @@
 
 namespace Modules\Report\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Sale;
+use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Traits\ApiResponseFormatTrait;
+use Modules\Report\Http\Requests\ReportRequest;
+use Modules\Report\Transformers\ReportResource;
 
 class ReportController extends Controller
 {
+
+    use ApiResponseFormatTrait;
     /**
      * Display a listing of the resource.
      */
@@ -15,18 +23,37 @@ class ReportController extends Controller
         return view('report::index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('report::create');
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(ReportRequest $request) {
+        try {
+            $request->validated();
+            
+            DB::beginTransaction();
+
+            // sales
+            $sales = Sale::with('sale_items')->get();
+
+            $report = Report::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'report_date' => $request->report_date,
+                'report_data' => $sales
+            ]);
+
+            DB::commit();
+
+            return ReportResource::make($report)
+                ->additional($this->preparedResponse('store'));
+
+           
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->apiResponseMessage(0, $e->getMessage(), 500);
+        }
+    }
 
     /**
      * Show the specified resource.
@@ -36,13 +63,7 @@ class ReportController extends Controller
         return view('report::show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('report::edit');
-    }
+    
 
     /**
      * Update the specified resource in storage.

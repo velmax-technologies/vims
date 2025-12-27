@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('name')->unique();
+            $table->string('title')->unique();
             $table->string('slug');
             $table->text('description')->nullable();
             $table->dateTime('report_date')->nullable();

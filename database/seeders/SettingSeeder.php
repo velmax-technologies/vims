@@ -13,6 +13,7 @@ class SettingSeeder extends Seeder
      */
       public function run(): void
     {
+        // general settings
         Setting::create([
             'key' => 'site_name',
             'group' => 'general',
@@ -29,6 +30,14 @@ class SettingSeeder extends Seeder
             'key' => 'site_developer',
             'group' => 'general',
             'value' => 'Veltech +254708222536',
+        ]);
+
+        // pricing settings
+        Setting::create([
+            'key' => 'enable_wholesale_pricing_for_customers',
+            'group' => 'pricing',
+            'type' => 'boolean',
+            'value' => '1', // 1 for true, 0 for false
         ]);
 
         // receipt settings
