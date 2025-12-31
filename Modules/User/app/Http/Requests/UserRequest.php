@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
             $rules['username'] = 'required|string|min:3|max:255|unique:users,username';
             $rules['email'] = 'required|email|max:255|unique:users,email';
             $rules['phone'] = 'nullable|string|max:15';
-            $rules['password'] = 'required|string|min:8|confirmed';
+            $rules['password'] = 'required|string|min:8';
         }
         if ($requetMethod === 'PUT' || $requetMethod === 'PATCH') {
             // Define validation rules for user update
@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
             $rules['username'] = 'sometimes|required|string|min:3|max:255|unique:users,username,' . $this->route('user');
             $rules['email'] = 'sometimes|required|email|max:255|unique:users,email,' . $this->route('user');
             $rules['phone'] = 'nullable|string|max:15';
-            $rules['password'] = 'sometimes|required|string|min:8|confirmed';
+            $rules['password'] = 'sometimes|required|string|min:8';
         }
        
         // Common rules for both creation and update

@@ -13,5 +13,6 @@
     "StockAdjustment": true,
     "Sale": true,
     "Menu": true,
-    "Report": true
+    "Report": true,
+    "Tag": true
 }

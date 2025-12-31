@@ -15,7 +15,8 @@
     11 => 'Modules\\Stock\\Providers\\StockServiceProvider',
     12 => 'Modules\\StockAdjustment\\Providers\\StockAdjustmentServiceProvider',
     13 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
-    14 => 'Modules\\User\\Providers\\UserServiceProvider',
+    14 => 'Modules\\Tag\\Providers\\TagServiceProvider',
+    15 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'eager' => 
   array (
@@ -33,7 +34,8 @@
     11 => 'Modules\\Stock\\Providers\\StockServiceProvider',
     12 => 'Modules\\StockAdjustment\\Providers\\StockAdjustmentServiceProvider',
     13 => 'Modules\\Supplier\\Providers\\SupplierServiceProvider',
-    14 => 'Modules\\User\\Providers\\UserServiceProvider',
+    14 => 'Modules\\Tag\\Providers\\TagServiceProvider',
+    15 => 'Modules\\User\\Providers\\UserServiceProvider',
   ),
   'deferred' => 
   array (

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
-            use ApiResponseFormatTrait;
+    use ApiResponseFormatTrait;
     /**
      * Display a listing of the resource.
      */
@@ -40,7 +40,7 @@ class UserController extends Controller
                 AllowedFilter::custom('permission', new FiltersUserPermission),
             ])
             ->get();
-        return (UserResource::collection($users))->additional($this->preparedResponse('index'));
+        return UserResource::collection($users)->additional($this->preparedResponse('index'));
     }
 
     /**
@@ -52,7 +52,7 @@ class UserController extends Controller
         
         // check permission
         if (!Auth::user()->can('manage users')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return $this->errorResponse('Unauthorized', 403, null);
         }
 
         $user = User::create($request->all());
@@ -92,7 +92,7 @@ class UserController extends Controller
         
         // check permission
         if (!Auth::user()->can('manage users')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return $this->errorResponse('Unauthorized', 403, null);
         }
 
         try {
@@ -121,7 +121,7 @@ class UserController extends Controller
     {        
         // check permission
         if (!Auth::user()->can('manage users')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return $this->errorResponse('Unauthorized', 403, null);
         }
 
         try {

@@ -35,6 +35,8 @@ class Item extends Model
 
     //casts
     protected $casts = [
+        'quantity' => 'float',
+        'available_quantity' => 'float',
         'is_active' => 'boolean',
         'is_kitchen_menu' => 'boolean',
     ];
