@@ -101,7 +101,7 @@ class ItemController extends Controller
             // Log the activity of item deletion
             activity('item deleted')->causedBy(auth()->user())->log('User ' . auth()->user()->username . ' deleted item: ' . $item->name);
 
-            return ItemResource::make($item)->additional($this->preparedResponse('delete'));
+            return ItemResource::make($item)->additional($this->preparedResponse('destroy'));
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);
         } catch (QueryException $queryException) {

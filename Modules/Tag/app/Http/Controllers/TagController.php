@@ -39,9 +39,7 @@ class TagController extends Controller
         
         } catch (QueryException $queryException) {
             return $this->queryExceptionResponse($queryException);
-        }
-
-        
+        }        
     }
 
     /**
