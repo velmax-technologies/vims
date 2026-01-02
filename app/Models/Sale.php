@@ -12,6 +12,7 @@ class Sale extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'shift_id',
         'user_id',
         'customer_id',
         'total_amount',
@@ -19,6 +20,17 @@ class Sale extends Model
         'note',
         'status'
     ];
+
+    protected $casts = [
+        'sold_at' => 'datetime',
+        'total_amount' => 'decimal:2',
+    ];
+
+    // shift relationship
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(Shift::class);
+    }
 
     // user relationship
     public function user(): BelongsTo

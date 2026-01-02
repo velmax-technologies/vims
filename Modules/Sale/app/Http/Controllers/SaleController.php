@@ -31,7 +31,7 @@ class SaleController extends Controller
         $sales = Sale::all();
 
         $sales = QueryBuilder::for(Sale::class)
-        ->allowedFilters(['user.name', 'customer.name'])
+        ->allowedFilters(['status','user.name', 'customer.name'])
         ->get();
 
         return SaleResource::collection($sales)

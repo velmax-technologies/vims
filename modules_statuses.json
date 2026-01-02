@@ -14,5 +14,6 @@
     "Sale": true,
     "Menu": true,
     "Report": true,
-    "Tag": true
+    "Tag": true,
+    "Shift": true
 }

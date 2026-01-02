@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('shift_id')->constrained('shifts')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->decimal('total_amount', 10, 2);
             $table->timestamp('sold_at')->useCurrent();
             $table->string('note')->nullable();
             $table->string('status')->default('pending'); // completed, cancelled, returned, pending
-            $table->softDeletes(); // Soft delete support
             $table->timestamps();
+            $table->softDeletes(); // Soft delete support
         });
     }
 

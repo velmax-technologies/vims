@@ -20,6 +20,11 @@ class ItemCost extends Model
         'stock_id',
     ];
 
+    // casts
+    protected $casts = [
+        //'cost' => 'float',
+    ];
+
     
     // logging
     public function getActivitylogOptions(): LogOptions

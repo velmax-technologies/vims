@@ -19,6 +19,10 @@ class ItemPrice extends Model
         'price',
     ];
 
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     // logging
     public function getActivitylogOptions(): LogOptions
     {

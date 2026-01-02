@@ -93,6 +93,16 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    // shifts
+    public function shifts(){
+        return $this->hasMany(Shift::class);
+    }
+
+    // get current active shift
+    public function active_shift(){
+        return $this->hasOne(Shift::class)->where('is_active', true);
+    }
+
     // purchases
     public function purchases()
     {

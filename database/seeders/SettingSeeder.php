@@ -216,6 +216,23 @@ class SettingSeeder extends Seeder
                
             ]),
         ]);
+
+
+        // shift settings
+        Setting::create([
+            'key' => 'auto_close_shifts',
+            'group' => 'shift',
+            'type' => 'boolean',
+            'value' => '1', // 1 for true, 0 for false
+        ]);
+
+        // shift duration in hours
+        Setting::create([
+            'key' => 'shift_duration_hours',
+            'group' => 'shift',
+            'type' => 'integer',
+            'value' => '24', // default 24 hours
+        ]);
         
        
 
