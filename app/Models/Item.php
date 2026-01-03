@@ -120,9 +120,9 @@ class Item extends Model
     }
 
     // item sales
-    public function item_sale(): HasOne
+    public function item_sales(): HasMany
     {
-        return $this->hasOne(ItemSale::class);
+        return $this->hasMany(ItemSale::class);
     }
 
     // item return

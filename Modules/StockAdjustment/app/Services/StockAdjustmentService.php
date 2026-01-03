@@ -15,7 +15,7 @@ class StockAdjustmentService
             $sa = StockAdjustment::create($adjustmentData);
             $stocks = $sa->item->stocks;
             $quantity = $sa->quantity;  
-            if($sa->type == 'subtraction' && $sa->model == 'sale'){                
+            if($sa->type == 'subtraction' && ($sa->model == 'sale' || $sa->model == 'order')){                
                 foreach($stocks as $stock){ 
                     if($stock->available_quantity >= $quantity){
                         $stock->available_quantity -= $quantity;
@@ -28,7 +28,7 @@ class StockAdjustmentService
                     }
                 }
             }
-            elseif($sa->type == 'addition' && $sa->model == 'sale'){
+            elseif($sa->type == 'addition' && ($sa->model == 'sale' || $sa->model == 'order')){
                 $stocks = Stock::where('item_id', $sa->item_id)->orderBy('created_at', 'desc')->get();
                 foreach($stocks as $stock){
                     if($stock->quantity - $stock->available_quantity >= $quantity){

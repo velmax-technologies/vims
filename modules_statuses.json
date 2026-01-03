@@ -15,5 +15,6 @@
     "Menu": true,
     "Report": true,
     "Tag": true,
-    "Shift": true
+    "Shift": true,
+    "Order": true
 }

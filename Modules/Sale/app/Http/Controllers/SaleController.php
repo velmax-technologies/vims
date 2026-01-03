@@ -28,10 +28,10 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::all();
+        //$sales = Sale::all();
 
         $sales = QueryBuilder::for(Sale::class)
-        ->allowedFilters(['status','user.name', 'customer.name'])
+        ->allowedFilters(['status','user.name', 'customer.name','shift_id'])
         ->get();
 
         return SaleResource::collection($sales)
@@ -47,6 +47,7 @@ class SaleController extends Controller
         if (!Auth::user()->can('create sale')) {
             return $this->errorResponse('Unauthorized', 403, null);
         }
+       
 
         $request->validated();
 
@@ -135,8 +136,6 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
-        //
-
-        return response()->json([]);
+        
     }
 }

@@ -44,6 +44,12 @@ class UsersSeeder extends Seeder
                 'email' => 'cashier@veltech.com',
                 'phone' => '0708222532',
             ]);
+            $waitressUser = User::factory()->create([
+                'name' => 'Waitress',
+                'username' => 'waitress',
+                'email' => 'waitress@veltech.com',
+                'phone' => '0708222533',
+            ]);
         }else{
             $saUser = User::factory()->create([
                 'name' => 'Super Admin',
@@ -59,5 +65,6 @@ class UsersSeeder extends Seeder
         $adminUser->assignRole('admin');
         $managerUser->assignRole('manager');
         $cashierUser->assignRole('cashier');
+        $waitressUser->assignRole('waitress');
     }    
 }
