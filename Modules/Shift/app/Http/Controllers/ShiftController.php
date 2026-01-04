@@ -40,7 +40,7 @@ class ShiftController extends Controller
 
         // check if there's already an active shift
         if (Shift::where('is_active', true)->exists()) {
-            return $this->errorResponse('There is already an active shift.', 400, null);
+            return $this->errorResponse('error', 400, 'There is already an active shift.');
         }
 
         $shift = $request->user()->shifts()->create([

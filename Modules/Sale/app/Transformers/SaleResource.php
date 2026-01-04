@@ -24,6 +24,7 @@ class SaleResource extends JsonResource
             'sale_items' => $this->sale_items->map(function ($item) {
                 return [
                     'item_id' => $item->item_id,
+                    'item' => $item->item->name ?? null,
                     'price' => $item->price,
                     'quantity' => $item->quantity,
                     'line_total' => $item->line_total,

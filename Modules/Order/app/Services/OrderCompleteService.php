@@ -26,7 +26,7 @@ class OrderCompleteService
                 'customer_id' => $order->customer_id,
                 'total_amount' => $order->total_amount,
                 'sold_at' => now(),
-                'status' => 'completed',
+                'status' => 'pending',
             ]);
 
             // create sale items
