@@ -24,6 +24,7 @@ class OrderResource extends JsonResource
             'order_items' => $this->order_items->map(function ($item) {
                 return [
                     'item_id' => $item->item_id,
+                    'item_name' => $item->item->name ?? null,
                     'price' => $item->price,
                     'quantity' => $item->quantity,
                     'line_total' => $item->line_total,

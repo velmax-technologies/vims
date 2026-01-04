@@ -51,8 +51,8 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
        // check permission
-        if (!Auth::user()->can('create sale')) {
-            return $this->errorResponse('Unauthorized', 403, null);
+        if (!Auth::user()->can('create orders')) {
+            return $this->errorResponse('error', 403, "Unauthorized to create orders.");
         }
        
         $request->validated();
@@ -76,7 +76,9 @@ class OrderController extends Controller
     public function update(OrderRequest $request, $id)
     {
          // check permission
-        if (!Auth::user()->can('create sale')) {
+        if (Auth::user()->can('create orders') || Auth::user()->can('edit orders') || Auth::user()->can('manage orders')) {
+            
+        }else{
             return $this->errorResponse('Unauthorized', 403, null);
         }
 
@@ -87,28 +89,21 @@ class OrderController extends Controller
 
             DB::beginTransaction();
 
-            // completing the order
-
-            if ($request->status === 'completed' && $order->status !== 'completed') {
-                if (!Auth::user()->can('manage sales')) {
+            // completing pending order
+            if ($request->status === 'completed' && $order->status === 'pending') {
+                if (!Auth::user()->can('manage orders')) {
                     return $this->errorResponse('Unauthorized', 403, null);
                 }
                 (new OrderCompleteService())->complete($request->all(), $order);
             }elseif($request->status == 'pending' && $order->status == 'pending') {
-                if (!Auth::user()->can('manage sales')) {
+                if (!Auth::user()->can('edit orders')) {
                     return $this->errorResponse('Unauthorized', 403, null);
                 }
                 (new OrderUpdateService())->update($request->all(), $order);
             }
             elseif($request->status == 'cancelled' && $order->status === 'completed') {
-                if (!Auth::user()->can('cancel completed sale')) {
-                    return $this->errorResponse('Unauthorized to cancel completed sales', 403, null);
-                }
-                (new OrderReturnService())->returnOrder($request->all(), $order);
-            }
-            elseif($request->status == 'returned' && $order->status === 'completed') {
-                if (!Auth::user()->can('return completed sale')) {
-                    return $this->errorResponse('Unauthorized to return completed sales', 403, null);
+                if (!Auth::user()->can('manage orders')) {
+                    return $this->errorResponse('Unauthorized to cancel completed orders', 403, null);
                 }
                 (new OrderReturnService())->returnOrder($request->all(), $order);
             }

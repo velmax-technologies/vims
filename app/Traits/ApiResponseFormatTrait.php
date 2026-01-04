@@ -63,7 +63,7 @@ trait ApiResponseFormatTrait
             $response['response']['error']['details'] = $errorDetails;
         }
         //return $statusCode;
-        return response()->json($response, $statusCode);
+        //return response()->json($response, $statusCode);
         return $response;
     }
 
