@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,6 +26,19 @@ class Sale extends Model
         'sold_at' => 'datetime',
         'total_amount' => 'decimal:2',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($sale) {
+            $sale->shift_id = Auth::user()->active_shift->id;
+            // You may need additional logic here to ensure uniqueness, 
+            // e.g., appending a number if the slug already exists.
+        });
+
+         
+    }
 
     // shift relationship
     public function shift(): BelongsTo

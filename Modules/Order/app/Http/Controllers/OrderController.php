@@ -82,22 +82,25 @@ class OrderController extends Controller
             return $this->errorResponse('Unauthorized', 403, null);
         }
 
+        // check for active shift
+        if (!Auth::user()->active_shift) {
+            return $this->errorResponse('error', 403, 'No active shift found. Please start a shift to proceed.');
+        }
+
         $request->validated();
 
         try {
             $order = Order::findOrFail($id);
 
-            DB::beginTransaction();
-
             // completing pending order
             if ($request->status === 'completed' && $order->status === 'pending') {
                 if (!Auth::user()->can('manage orders')) {
-                    return $this->errorResponse('Unauthorized', 403, null);
+                    return $this->errorResponse('error', 403, 'Unauthorized to complete orders.');
                 }
-                (new OrderCompleteService())->complete($request->all(), $order);
+               return (new OrderCompleteService())->complete($request->all(), $order);
             }elseif($request->status == 'pending' && $order->status == 'pending') {
                 if (!Auth::user()->can('edit orders')) {
-                    return $this->errorResponse('Unauthorized', 403, null);
+                    return $this->errorResponse('error', 403, 'Unauthorized to edit orders.');
                 }
                 (new OrderUpdateService())->update($request->all(), $order);
             }
@@ -113,16 +116,13 @@ class OrderController extends Controller
             }   
 
              // log sale update
-             activity()
-             ->causedBy(Auth::user())
-             ->performedOn($order)
-             ->withProperties(['order_id' => $order->id])
-             ->log('Order updated with ID: ' . $order->id);
+            //  activity()
+            //  ->causedBy(Auth::user())
+            //  ->performedOn($order)
+            //  ->withProperties(['order_id' => $order->id])
+            //  ->log('Order updated with ID: ' . $order->id);
 
 
-            DB::commit();
-            return (new OrderResource($order))
-                ->additional($this->preparedResponse('update'));
         } catch (ModelNotFoundException $modelException) {
             return $this->recordNotFoundResponse($modelException);
         } catch (QueryException $queryException) {

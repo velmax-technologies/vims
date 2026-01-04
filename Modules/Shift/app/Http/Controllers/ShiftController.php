@@ -66,11 +66,24 @@ class ShiftController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(ShiftRequest $request, $id)
     {
-        //
+        try {
+            $shift = Shift::findOrFail($id);
 
-        return response()->json([]);
+            // Only allow updating if the shift is active
+            if (!$shift->is_active) {
+                return $this->errorResponse('error', 400, 'Cannot update an inactive shift.');
+            }
+            $shift->is_active = $request->is_active;
+            $shift->end_time = now();
+            $shift->save();
+
+            return ShiftResource::make($shift)
+                ->additional($this->preparedResponse('update'));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 400, null);
+        }
     }
 
     /**

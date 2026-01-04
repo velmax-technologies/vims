@@ -48,13 +48,11 @@ class RolesAndPermissionsSeeder extends Seeder
         $editOrders = Permission::create(['name' => 'edit orders']);
         $manageOrders = Permission::create(['name' => 'manage orders']);
         $cancelPendingOrders = Permission::create(['name' => 'cancel pending orders']);
-        $cancelCompletedOrders = Permission::create(['name' => 'cancel completed orders']);
-
 
         // Assign permissions to roles as needed
         //$saRole->givePermissionTo($manageUsers);
         $adminRole->givePermissionTo($manageUsers, $manageItems, $manageStock, $manageCustomers, $manageSuppliers, $managePurchases, $returnCompletedSale, $cancelPendingSale, $cancelCompletedSale);
-        $cashierRole->givePermissionTo($manageSales, $createSale, $manageCustomers, $manageUsers, $managePurchases, $cancelPendingSale, $createOrders, $editOrders, $cancelPendingOrders);
+        $cashierRole->givePermissionTo($manageSales, $createSale, $manageCustomers, $manageUsers, $managePurchases, $manageOrders, $cancelPendingSale, $createOrders, $editOrders, $cancelPendingOrders);
         $waiterRole->givePermissionTo($createSale);
         $waitressRole->givePermissionTo($createOrders, $editOrders, $cancelPendingOrders);
         
