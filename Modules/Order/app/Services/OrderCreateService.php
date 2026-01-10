@@ -27,8 +27,14 @@ class OrderCreateService
 
             // if item is a kitchen menu, check stock for each component
             if ($item->is_kitchen_menu) {
+
+                // check if kitchen menu has defined components
+                if (!$item->menu || $item->menu->menu_items->isEmpty()) {
+                    return $this->errorResponse('error', 400, "The kitchen menu item '$item->name' has no defined components.");
+                }
+                
+                // for kitchen menu, check each component item stock
                 foreach ($item->menu_items as $menuItem) {
-                   
                     $componentItem = Item::find($menuItem->item_id);
                     $availableQuantity = $componentItem->available_quantity;
                     $requiredQuantity = $menuItem->quantity * $order_item['quantity'];
@@ -114,15 +120,17 @@ class OrderCreateService
 
             // Commit the transaction
             DB::commit(); 
+
+            return (new OrderResource($order))
+            ->additional($this->preparedResponse('store'));
             
         } catch (\Exception $e) {
             DB::rollBack();
             //throw new \Exception($e->getMessage());
             //return $e->getMessage();
-            return $this->errorResponse($e->getMessage(), 400, null);
+            return $this->errorResponse('error', 400, $e->getMessage());
         }
 
-        return (new OrderResource($order))
-            ->additional($this->preparedResponse('store'));
+       
     }
 }

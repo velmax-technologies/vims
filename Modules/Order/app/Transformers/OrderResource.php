@@ -20,9 +20,9 @@ class OrderResource extends JsonResource
             'customer' => $this->customer->name ?? null,
             'total_amount' => $this->total_amount,
             'status' => $this->status,
-            'sold_at' => $this->sold_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'placed_at' => $this->placed_at?->format('Y-m-d H:i'),
+            'created_at' => $this->created_at?->format('Y-m-d H:i'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i'),
             'order_items' => $this->order_items->map(function ($item) {
                 return [
                     'item_id' => $item->item_id,

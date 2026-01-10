@@ -24,7 +24,7 @@ class OrderRequest extends FormRequest
                 'user_id' => 'required|exists:users,id',
                 'total_amount' => 'required|numeric|min:0',
                 'note' => 'nullable|string|max:255',
-                'order_items' => 'required|array',
+                'order_items' => 'array',
                 'order_items.*.item_id' => 'required|exists:items,id',
                 'order_items.*.price' => 'required|numeric|min:0',
                 'order_items.*.quantity' => [

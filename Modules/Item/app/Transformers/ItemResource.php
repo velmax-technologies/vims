@@ -2,8 +2,10 @@
 
 namespace Modules\Item\Transformers;
 
+use Illuminate\Container\Attributes\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Tag\Transformers\TagResource;
 
 class ItemResource extends JsonResource
 {
@@ -20,7 +22,7 @@ class ItemResource extends JsonResource
             'cost' => $this->costs()->latest()->first()->cost ?? "0",
             'wholesale_price' => $this->item_prices()->withAnyTags(['wholesale'], 'priceTag')->latest()->first()->price ?? "0",
             'retail_price' => $this->item_prices()->withAnyTags(['retail'], 'priceTag')->latest()->first()->price ?? "0",
-            'tags' => $this->tags->pluck('name'),
+            'tags' => TagResource::collection($this->tags),
         ];
     }
 }

@@ -17,7 +17,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'placed_at' => 'datetime',
+        'placed_at' => 'datetime:Y-m-d H:i',
         'total_amount' => 'decimal:2',
     ];
 

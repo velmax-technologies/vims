@@ -23,7 +23,8 @@ class Sale extends Model
     ];
 
     protected $casts = [
-        'sold_at' => 'datetime',
+        'sold_at' => 'datetime:Y-m-d H:i',
+        'updated_at' => 'datetime:Y-m-d H:i',
         'total_amount' => 'decimal:2',
     ];
 
