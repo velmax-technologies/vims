@@ -22,9 +22,7 @@ class SaleUpdateService
             $sale->update($requestData);
 
             // update sale items if provided
-            if (isset($requestData['sale_items'])) {
-
-                
+            if (isset($requestData['sale_items'])) {            
 
                 // delete sale items
                 $sale->sale_items()->delete();               
@@ -38,7 +36,6 @@ class SaleUpdateService
                 foreach($stockAdjustments as $stockAdjustment){
                     
                     // adjust stock
-
                     $stocks = Stock::where('item_id', $stockAdjustment->item_id)->orderBy('created_at', 'desc')->get();
                     $quantity = $stockAdjustment->quantity;
                     

@@ -19,16 +19,24 @@ class OrderCompleteService
             DB::beginTransaction();
 
             $order->update($requestData);
-             
-            // create sale
-            $sale = Sale::create([
-                'user_id' => $order->user_id,
-                'customer_id' => $order->customer_id,
-                'total_amount' => $order->total_amount,
-                'sold_at' => now(),
-                'status' => 'pending',
-            ]);
 
+            // check if order belongs to a sale
+            if (!$order->sale) {
+                // create sale
+                $sale = Sale::create([
+                    'user_id' => $order->user_id,
+                    'customer_id' => $order->customer_id,
+                    'total_amount' => $order->total_amount,
+                    'sold_at' => now(),
+                    'status' => 'pending',
+                ]);
+            }
+            else {
+                $sale = $order->sale;
+                $sale->update([
+                    'total_amount' => $order->total_amount + $sale->total_amount,
+                ]);
+            }
             // create sale items
             foreach ($order->order_items as $orderItem) {
                 SaleItem::create([
@@ -54,11 +62,20 @@ class OrderCompleteService
             }
        
             // log sale completion
-            activity()
+            if(!$order->sale) {
+               activity()
                 ->causedBy(Auth::user())
                 ->performedOn($sale)
                 ->withProperties(['sale_id' => $sale->id])
                 ->log('Sale completed with ID: ' . $sale->id);
+            }
+            else {
+                activity()
+                ->causedBy(Auth::user())
+                ->performedOn($sale)
+                ->withProperties(['sale_id' => $sale->id])
+                ->log('Sale updated with ID: ' . $sale->id);
+            }
 
             DB::commit();
             return SaleResource::make($sale)->additional($this->preparedResponse('store'));
